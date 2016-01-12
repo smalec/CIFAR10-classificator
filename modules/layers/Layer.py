@@ -1,7 +1,5 @@
 class Layer(object):
-    def __init__(self, in_size, out_size):
-        self.in_size = in_size
-        self.out_size = out_size
+    def __init__(self):
         self.weights, self.biases = None, None
         self.inputs, self.outputs = None, None
 

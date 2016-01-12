@@ -10,7 +10,7 @@ class Network(object):
         self.X = T.matrix('X', dtype='float32')
         self.Y = T.ivector('Y')
         self.output = self.connect_layers()
-        self.run = function([self.X], T.argmax(self.output, axis=1))
+        self.predict = function([self.X], T.argmax(self.output, axis=1))
 
     def connect_layers(self):
         self.layers[0].propagate(self.X)
@@ -54,9 +54,6 @@ class Network(object):
             updates += [(v, v_update), (p, p_update)]
 
         self.train_step = function([self.X, self.Y, rate, momentum, weight_decay], cost, updates=updates)
-
-    def predict(self, inputs):
-        return self.run(inputs)
 
     def compute_error_rate(self, stream):
         errors = 0.0
