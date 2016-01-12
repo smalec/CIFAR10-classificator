@@ -1,5 +1,4 @@
 .ipynb_checkpoints
-
-modules/__init__.pyc
-modules/layers/__init__.pyc
+*.pyc
+*.py~
 
