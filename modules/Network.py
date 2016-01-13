@@ -40,6 +40,7 @@ class Network(object):
                   (epoch + 1, self.compute_error_rate(validation_stream) * 100)
 
     def init_training(self):
+        self.init_parameters()
         rate = T.scalar('rate', dtype='float32')
         momentum = T.scalar('momentum', dtype='float32')
         weight_decay = T.scalar('weight_decay', dtype='float32')
@@ -62,3 +63,7 @@ class Network(object):
             errors += (self.predict(X) != Y.ravel()).sum()
             total += Y.shape[0]
         return errors / total
+
+    def init_parameters(self):
+        for p in self.parameters:
+            p.set_value(p.tag.initializer.generate(p.get_value().shape))

@@ -1,6 +1,6 @@
 class Layer(object):
-    def __init__(self):
-        self.weights, self.biases = None, None
+    def __init__(self, weights_initializer, biases_initializer):
+        self.weights, self.biases = weights_initializer, biases_initializer
         self.inputs, self.outputs = None, None
 
     @property
