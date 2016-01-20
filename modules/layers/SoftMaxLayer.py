@@ -1,33 +1,27 @@
 import theano.tensor as T
-import numpy as np
-from theano import shared
 from Layer import Layer
-from ..initializators.Constant import Constant
+from ..initializers.Constant import Constant
 
 
 class SoftMaxLayer(Layer):
     def __init__(self, in_size, out_size, weights_initializer=None, biases_initializer=None):
-        super(SoftMaxLayer, self).__init__(weights_initializer, biases_initializer)
+        super(SoftMaxLayer, self).__init__(weights_initializer, (in_size, out_size), biases_initializer, (out_size,))
         self.in_size = in_size
         self.out_size = out_size
-        if not self.weights:
-            self.weights = self.init_weights()
-        if not self.biases:
-            self.biases = self.init_biases()
+        if not self.weights.tag.initializer:
+            self.init_weights()
+        if not self.biases.tag.initializer:
+            self.init_biases()
 
     def propagate(self, inputs):
         self.inputs = inputs.reshape((inputs.shape[0], self.in_size))
         self.outputs = T.nnet.softmax(T.dot(self.inputs, self.weights) + self.biases.dimshuffle('x', 0))
 
     def init_weights(self):
-        weights = shared(np.zeros((self.in_size, self.out_size), dtype=np.float32), name='W')
-        weights.tag.initializer = Constant(0.0)
-        return weights
+        self.weights.tag.initializer = Constant(0.0)
 
     def init_biases(self):
-        biases = shared(np.zeros((self.out_size,), dtype=np.float32), name='b')
-        biases.tag.initializer = Constant(0.0)
-        return biases
+        self.biases.tag.initializer = Constant(0.0)
 
     def cost(self, Y):
         return - T.log(self.outputs[T.arange(Y.shape[0]), Y]).mean()

@@ -25,19 +25,22 @@ class Network(object):
     def train(self, train_stream, validation_stream, epochs, rate, momentum, weight_decay):
         self.init_training()
         batch_counter = 1
+        train_cost = []
         for epoch in range(epochs):
             for X_batch, Y_batch in train_stream.get_epoch_iterator():
                 k = 2000
-                rate = rate * k / np.maximum(k, batch_counter)
-                cost = self.train_step(X_batch, Y_batch.ravel(), np.float32(rate),
+                learning_rate = rate * k / np.maximum(k, batch_counter)
+                cost = self.train_step(X_batch, Y_batch.ravel(), np.float32(learning_rate),
                                                                  np.float32(momentum),
                                                                  np.float32(weight_decay))
+                train_cost.append((batch_counter, cost))
                 if batch_counter % 100 == 0:
                     print "At batch #%d, batch cost: %f" % (batch_counter, cost)
                 batch_counter += 1
 
             print "After epoch %d: validation error: %f%%" % \
                   (epoch + 1, self.compute_error_rate(validation_stream) * 100)
+        return np.array(train_cost)
 
     def init_training(self):
         self.init_parameters()
