@@ -28,7 +28,7 @@ class ConvolutionalPoolLayer(Layer):
         self.inputs = T.reshape(inputs, images_shape, ndim=4)
         if self.conv_mode == 'same':
             pads = ((self.filter_shape[2]/2, (self.filter_shape[2] - 1)/2),
-                    (self.filter_shape[2]/2, (self.filter_shape[3] - 1)/2))
+                    (self.filter_shape[3]/2, (self.filter_shape[3] - 1)/2))
             img_rng = (pads[0][0], images_shape[2] + pads[0][1]), (pads[1][0], images_shape[3] + pads[1][1])
             full_conv_no_bias = T.nnet.conv2d(self.inputs, self.weights, border_mode='full')
             conv_no_bias = full_conv_no_bias[:, :, img_rng[0][0]:img_rng[0][1], img_rng[1][0]:img_rng[1][1]]
