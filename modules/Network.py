@@ -52,6 +52,7 @@ class Network(object):
             valid_error = self.compute_error_rate(validation_stream)
             if valid_error < best_valid_error:
                 epochs = np.maximum(epochs, epoch * patience_expansion + 1)
+                best_valid_error = valid_error
                 best_params = self.snapshot_parameters()
             valid_errors.append((batch_counter, valid_error))
             print "After epoch %d: validation error: %f%%" % \
