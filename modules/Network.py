@@ -96,7 +96,7 @@ class Network(object):
                 string += str(p) + " " + str(o) + "\n"
             f = open("../results.txt", 'w')
             f.write(string)
-        return 1.0 * sum(predicted != original) / total
+        return 1.0 * sum(np.array(predicted) != np.array(original)) / total
 
     def init_parameters(self):
         for p in self.parameters:
