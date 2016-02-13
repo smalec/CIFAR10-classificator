@@ -87,12 +87,12 @@ class Network(object):
         total = 0
         predicted, original = [], []
         for X, Y in stream.get_epoch_iterator():
-            predicted += self.predict(X)
-            original += Y.ravel()
+            predicted += list(self.predict(X))
+            original += list(Y.ravel())
             total += Y.shape[0]
         if save:
             string = ""
-            for p, o in zip(list(predicted), list(original)):
+            for p, o in zip(predicted, original):
                 string += str(p) + " " + str(o) + "\n"
             f = open("../results.txt", 'w')
             f.write(string)
