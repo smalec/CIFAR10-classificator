@@ -94,7 +94,7 @@ class Network(object):
             string = ""
             for p, o in zip(predicted, original):
                 string += str(p) + " " + str(o) + "\n"
-            f = open("../results.txt", 'w')
+            f = open("results.txt", 'w')
             f.write(string)
         return 1.0 * sum(np.array(predicted) != np.array(original)) / total
 
