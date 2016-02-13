@@ -83,13 +83,20 @@ class Network(object):
 
         self.train_step = function([self.X, self.Y, rate, momentum, weight_decay], [cost, err_rate], updates=updates)
 
-    def compute_error_rate(self, stream):
-        errors = 0.0
+    def compute_error_rate(self, stream, save=False):
         total = 0
+        predicted, original = [], []
         for X, Y in stream.get_epoch_iterator():
-            errors += (self.predict(X) != Y.ravel()).sum()
+            predicted += self.predict(X)
+            original += Y.ravel()
             total += Y.shape[0]
-        return errors / total
+        if save:
+            string = ""
+            for p, o in zip(list(predicted), list(original)):
+                string += str(p) + " " + str(o) + "\n"
+            f = open("../results.txt", 'w')
+            f.write(string)
+        return 1.0 * sum(predicted != original) / total
 
     def init_parameters(self):
         for p in self.parameters:
